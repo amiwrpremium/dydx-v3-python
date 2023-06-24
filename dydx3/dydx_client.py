@@ -17,21 +17,22 @@ from dydx3.starkex.starkex_resources.cpp_signature import (
 class Client(object):
 
     def __init__(
-        self,
-        host,
-        api_timeout=None,
-        default_ethereum_address=None,
-        eth_private_key=None,
-        eth_send_options=None,
-        network_id=None,
-        stark_private_key=None,
-        stark_public_key=None,
-        stark_public_key_y_coordinate=None,
-        web3=None,
-        web3_account=None,
-        web3_provider=None,
-        api_key_credentials=None,
-        crypto_c_exports_path=None,
+            self,
+            host,
+            api_timeout=None,
+            proxy=None,
+            default_ethereum_address=None,
+            eth_private_key=None,
+            eth_send_options=None,
+            network_id=None,
+            stark_private_key=None,
+            stark_public_key=None,
+            stark_public_key_y_coordinate=None,
+            web3=None,
+            web3_account=None,
+            web3_provider=None,
+            api_key_credentials=None,
+            crypto_c_exports_path=None,
     ):
         # Remove trailing '/' if present, from host.
         if host.endswith('/'):
@@ -39,6 +40,7 @@ class Client(object):
 
         self.host = host
         self.api_timeout = api_timeout or DEFAULT_API_TIMEOUT
+        self.proxy = proxy
         self.eth_send_options = eth_send_options or {}
         self.stark_private_key = stark_private_key
         self.api_key_credentials = api_key_credentials
@@ -87,13 +89,13 @@ class Client(object):
                 private_key_to_public_key_pair_hex(stark_private_key)
             )
             if (
-                stark_public_key is not None and
-                stark_public_key != self.stark_public_key
+                    stark_public_key is not None and
+                    stark_public_key != self.stark_public_key
             ):
                 raise ValueError('STARK public/private key mismatch')
             if (
-                stark_public_key_y_coordinate is not None and
-                stark_public_key_y_coordinate !=
+                    stark_public_key_y_coordinate is not None and
+                    stark_public_key_y_coordinate !=
                     self.stark_public_key_y_coordinate
             ):
                 raise ValueError('STARK public/private key mismatch (y)')
@@ -103,9 +105,9 @@ class Client(object):
 
         # Generate default API key credentials if needed and possible.
         if (
-            self.eth_signer and
-            self.default_address and
-            not self.api_key_credentials
+                self.eth_signer and
+                self.default_address and
+                not self.api_key_credentials
         ):
             # This may involve a web3 call, so recover on failure.
             try:
@@ -141,6 +143,7 @@ class Client(object):
                     stark_private_key=self.stark_private_key,
                     default_address=self.default_address,
                     api_timeout=self.api_timeout,
+                    proxies=self.proxy,
                     api_key_credentials=self.api_key_credentials,
                 )
             else:

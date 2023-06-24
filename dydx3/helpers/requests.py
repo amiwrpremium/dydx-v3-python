@@ -20,7 +20,7 @@ class Response(object):
         self.headers = headers
 
 
-def request(uri, method, headers=None, data_values={}, api_timeout=None):
+def request(uri, method, headers=None, data_values={}, api_timeout=None, proxies=None):
     response = send_request(
         uri,
         method,
@@ -28,7 +28,8 @@ def request(uri, method, headers=None, data_values={}, api_timeout=None):
         data=json.dumps(
             remove_nones(data_values)
         ),
-        timeout=api_timeout
+        timeout=api_timeout,
+        proxies=proxies,
     )
     if not str(response.status_code).startswith('2'):
         raise DydxApiError(response)

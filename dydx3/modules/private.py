@@ -28,28 +28,30 @@ from dydx3.starkex.transfer import SignableTransfer
 class Private(object):
 
     def __init__(
-        self,
-        host,
-        network_id,
-        stark_private_key,
-        default_address,
-        api_timeout,
-        api_key_credentials,
+            self,
+            host,
+            network_id,
+            stark_private_key,
+            default_address,
+            api_timeout,
+            proxies,
+            api_key_credentials,
     ):
         self.host = host
         self.network_id = network_id
         self.stark_private_key = stark_private_key
         self.default_address = default_address
         self.api_timeout = api_timeout
+        self.proxies = proxies
         self.api_key_credentials = api_key_credentials
 
     # ============ Request Helpers ============
 
     def _private_request(
-        self,
-        method,
-        endpoint,
-        data={},
+            self,
+            method,
+            endpoint,
+            data={},
     ):
         now_iso_string = generate_now_iso()
         request_path = '/'.join(['/v3', endpoint])
@@ -71,6 +73,7 @@ class Private(object):
             headers,
             data,
             self.api_timeout,
+            self.proxies
         )
 
     def _get(self, endpoint, params):
@@ -102,7 +105,7 @@ class Private(object):
     # ============ Requests ============
 
     def get_api_keys(
-        self,
+            self,
     ):
         '''
         Get API keys.
@@ -138,14 +141,14 @@ class Private(object):
         return self._get('users', {})
 
     def update_user(
-        self,
-        user_data={},
-        email=None,
-        username=None,
-        is_sharing_username=None,
-        is_sharing_address=None,
-        country=None,
-        language_code=None,
+            self,
+            user_data={},
+            email=None,
+            username=None,
+            is_sharing_username=None,
+            is_sharing_address=None,
+            country=None,
+            language_code=None,
     ):
         '''
         Update user information
@@ -188,9 +191,9 @@ class Private(object):
         )
 
     def create_account(
-        self,
-        stark_public_key,
-        stark_public_key_y_coordinate,
+            self,
+            stark_public_key,
+            stark_public_key_y_coordinate,
     ):
         '''
         Make an account
@@ -214,8 +217,8 @@ class Private(object):
         )
 
     def get_account(
-        self,
-        ethereum_address=None,
+            self,
+            ethereum_address=None,
     ):
         '''
         Get an account
@@ -236,7 +239,7 @@ class Private(object):
         )
 
     def get_accounts(
-        self,
+            self,
     ):
         '''
         Get accounts
@@ -251,11 +254,11 @@ class Private(object):
         )
 
     def get_positions(
-        self,
-        market=None,
-        status=None,
-        limit=None,
-        created_before_or_at=None,
+            self,
+            market=None,
+            status=None,
+            limit=None,
+            created_before_or_at=None,
     ):
         '''
         Get positions
@@ -296,14 +299,14 @@ class Private(object):
         )
 
     def get_orders(
-        self,
-        market=None,
-        status=None,
-        side=None,
-        order_type=None,
-        limit=None,
-        created_before_or_at=None,
-        returnLatestOrders=None,
+            self,
+            market=None,
+            status=None,
+            side=None,
+            order_type=None,
+            limit=None,
+            created_before_or_at=None,
+            returnLatestOrders=None,
     ):
         '''
         Get orders
@@ -366,10 +369,10 @@ class Private(object):
         )
 
     def get_active_orders(
-        self,
-        market,
-        side=None,
-        id=None,
+            self,
+            market,
+            side=None,
+            id=None,
     ):
         '''
         Get ActiveOrders
@@ -405,8 +408,8 @@ class Private(object):
         )
 
     def get_order_by_id(
-        self,
-        order_id,
+            self,
+            order_id,
     ):
         '''
         Get order by its id
@@ -424,8 +427,8 @@ class Private(object):
         )
 
     def get_order_by_client_id(
-        self,
-        client_id,
+            self,
+            client_id,
     ):
         '''
         Get order by its client_id
@@ -443,24 +446,24 @@ class Private(object):
         )
 
     def create_order(
-        self,
-        position_id,
-        market,
-        side,
-        order_type,
-        post_only,
-        size,
-        price,
-        limit_fee,
-        time_in_force=None,
-        cancel_id=None,
-        trigger_price=None,
-        trailing_percent=None,
-        client_id=None,
-        expiration=None,
-        expiration_epoch_seconds=None,
-        signature=None,
-        reduce_only=None
+            self,
+            position_id,
+            market,
+            side,
+            order_type,
+            post_only,
+            size,
+            price,
+            limit_fee,
+            time_in_force=None,
+            cancel_id=None,
+            trigger_price=None,
+            trailing_percent=None,
+            client_id=None,
+            expiration=None,
+            expiration_epoch_seconds=None,
+            signature=None,
+            reduce_only=None
     ):
         '''
         Post an order
@@ -547,7 +550,7 @@ class Private(object):
             expiration_epoch_seconds,
         )
         expiration_epoch_seconds = (
-            expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
+                expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
         )
 
         order_signature = signature
@@ -594,8 +597,8 @@ class Private(object):
         )
 
     def cancel_order(
-        self,
-        order_id,
+            self,
+            order_id,
     ):
         '''
         Cancel an order
@@ -613,8 +616,8 @@ class Private(object):
         )
 
     def cancel_all_orders(
-        self,
-        market=None,
+            self,
+            market=None,
     ):
         '''
         Cancel all orders
@@ -638,10 +641,10 @@ class Private(object):
         )
 
     def cancel_active_orders(
-        self,
-        market,
-        side=None,
-        id=None,
+            self,
+            market,
+            side=None,
+            id=None,
     ):
         '''
         Cancel ActiveOrders
@@ -677,11 +680,11 @@ class Private(object):
         )
 
     def get_fills(
-        self,
-        market=None,
-        order_id=None,
-        limit=None,
-        created_before_or_at=None,
+            self,
+            market=None,
+            order_id=None,
+            limit=None,
+            created_before_or_at=None,
     ):
         '''
         Get fills
@@ -718,10 +721,10 @@ class Private(object):
         )
 
     def get_transfers(
-        self,
-        transfer_type=None,
-        limit=None,
-        created_before_or_at=None,
+            self,
+            transfer_type=None,
+            limit=None,
+            created_before_or_at=None,
     ):
         '''
         Get transfers
@@ -753,15 +756,15 @@ class Private(object):
         )
 
     def create_withdrawal(
-        self,
-        position_id,
-        amount,
-        asset,
-        to_address,
-        client_id=None,
-        expiration=None,
-        expiration_epoch_seconds=None,
-        signature=None,
+            self,
+            position_id,
+            amount,
+            asset,
+            to_address,
+            client_id=None,
+            expiration=None,
+            expiration_epoch_seconds=None,
+            signature=None,
     ):
         '''
         Post a withdrawal
@@ -809,7 +812,7 @@ class Private(object):
             expiration_epoch_seconds,
         )
         expiration_epoch_seconds = (
-            expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
+                expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
         )
 
         if not signature:
@@ -837,16 +840,16 @@ class Private(object):
         return self._post('withdrawals', params)
 
     def create_transfer(
-        self,
-        amount,
-        position_id,
-        receiver_account_id,
-        receiver_public_key,
-        receiver_position_id,
-        client_id=None,
-        expiration=None,
-        expiration_epoch_seconds=None,
-        signature=None,
+            self,
+            amount,
+            position_id,
+            receiver_account_id,
+            receiver_public_key,
+            receiver_position_id,
+            client_id=None,
+            expiration=None,
+            expiration_epoch_seconds=None,
+            signature=None,
     ):
         '''
         Create a L2 transfer.
@@ -893,7 +896,7 @@ class Private(object):
             expiration_epoch_seconds,
         )
         expiration_epoch_seconds = (
-            expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
+                expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
         )
 
         transfer_signature = signature
@@ -924,19 +927,19 @@ class Private(object):
         return self._post('transfers', params)
 
     def create_fast_withdrawal(
-        self,
-        position_id,
-        credit_asset,
-        credit_amount,
-        debit_amount,
-        to_address,
-        lp_position_id,
-        lp_stark_public_key,
-        slippage_tolerance=None,
-        client_id=None,
-        expiration=None,
-        expiration_epoch_seconds=None,
-        signature=None,
+            self,
+            position_id,
+            credit_asset,
+            credit_amount,
+            debit_amount,
+            to_address,
+            lp_position_id,
+            lp_stark_public_key,
+            slippage_tolerance=None,
+            client_id=None,
+            expiration=None,
+            expiration_epoch_seconds=None,
+            signature=None,
     ):
         '''
         Post a fast withdrawal
@@ -994,7 +997,7 @@ class Private(object):
             expiration_epoch_seconds,
         )
         expiration_epoch_seconds = (
-            expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
+                expiration_epoch_seconds or iso_to_epoch_seconds(expiration)
         )
 
         if not signature:
@@ -1040,10 +1043,10 @@ class Private(object):
         return self._post('fast-withdrawals', params)
 
     def get_funding_payments(
-        self,
-        market=None,
-        limit=None,
-        effective_before_or_at=None,
+            self,
+            market=None,
+            limit=None,
+            effective_before_or_at=None,
     ):
         '''
         Get funding payments
@@ -1076,9 +1079,9 @@ class Private(object):
         )
 
     def get_historical_pnl(
-        self,
-        created_before_or_at=None,
-        created_on_or_after=None,
+            self,
+            created_before_or_at=None,
+            created_on_or_after=None,
     ):
         '''
         Get historical pnl ticks
@@ -1102,7 +1105,7 @@ class Private(object):
         )
 
     def send_verification_email(
-        self,
+            self,
     ):
         '''
         Send verification email
@@ -1117,8 +1120,8 @@ class Private(object):
         )
 
     def get_trading_rewards(
-        self,
-        epoch=None,
+            self,
+            epoch=None,
     ):
         '''
         Get trading rewards
@@ -1138,8 +1141,8 @@ class Private(object):
         )
 
     def get_liquidity_provider_rewards_v2(
-        self,
-        epoch=None,
+            self,
+            epoch=None,
     ):
         '''
         Get liquidity provider rewards
@@ -1159,8 +1162,8 @@ class Private(object):
         )
 
     def get_liquidity_provider_rewards(
-        self,
-        epoch=None,
+            self,
+            epoch=None,
     ):
         '''
         (Deprecated, please use get_liquidity_provider_rewards_v2)
@@ -1181,7 +1184,7 @@ class Private(object):
         )
 
     def get_retroactive_mining_rewards(
-        self,
+            self,
     ):
         '''
         Get retroactive mining rewards
@@ -1193,7 +1196,7 @@ class Private(object):
         return self._get('rewards/retroactive-mining')
 
     def request_testnet_tokens(
-        self,
+            self,
     ):
         '''
         Requests tokens on dYdX's staging server.
@@ -1209,7 +1212,7 @@ class Private(object):
         return self._post('testnet/tokens', {})
 
     def get_profile(
-        self,
+            self,
     ):
         '''
         Get Private Profile
@@ -1221,7 +1224,7 @@ class Private(object):
         return self._get('profile/private', {})
 
     def get_user_links(
-        self,
+            self,
     ):
         '''
         Get Active Linked Users
@@ -1233,9 +1236,9 @@ class Private(object):
         return self._get('users/links', {})
 
     def send_link_request(
-        self,
-        action,
-        address,
+            self,
+            action,
+            address,
     ):
         '''
         Send Link Request Action
@@ -1265,7 +1268,7 @@ class Private(object):
         )
 
     def get_user_pending_link_requests(
-        self,
+            self,
     ):
         '''
         Get Pending Linked User Requests
@@ -1279,17 +1282,17 @@ class Private(object):
     # ============ Signing ============
 
     def sign(
-        self,
-        request_path,
-        method,
-        iso_timestamp,
-        data,
+            self,
+            request_path,
+            method,
+            iso_timestamp,
+            data,
     ):
         message_string = (
-            iso_timestamp +
-            method +
-            request_path +
-            (json_stringify(data) if data else '')
+                iso_timestamp +
+                method +
+                request_path +
+                (json_stringify(data) if data else '')
         )
 
         hashed = hmac.new(
