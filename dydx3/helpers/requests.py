@@ -41,4 +41,4 @@ def request(uri, method, headers=None, data_values={}, api_timeout=None, proxies
 
 
 def send_request(uri, method, headers=None, **kwargs):
-    return getattr(session, method)(uri, headers=headers, **kwargs)
+    return getattr(session, method)(uri, headers=headers, proxies=kwargs.pop('proxies'), **kwargs)
