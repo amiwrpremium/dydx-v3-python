@@ -84,7 +84,7 @@ class Eth(object):
                     self.network_id,
                 )
             )
-        contract_address = Web3.toChecksumAddress(contract_address)
+        contract_address = Web3.to_checksum_address(contract_address)
         return self.get_contract(contract_address, STARKWARE_PERPETUALS_ABI)
 
     def get_token_contract(
@@ -101,7 +101,7 @@ class Eth(object):
                     self.network_id,
                 )
             )
-        token_address = Web3.toChecksumAddress(token_address)
+        token_address = Web3.to_checksum_address(token_address)
         return self.get_contract(token_address, ERC20_ABI)
 
     def send_eth_transaction(
@@ -400,7 +400,7 @@ class Eth(object):
             options=dict(
                 send_options,
                 to=to_address,
-                value=Web3.toWei(human_amount, 'ether'),
+                value=Web3.to_wei(human_amount, 'ether'),
             ),
         )
 
@@ -513,7 +513,7 @@ class Eth(object):
             )
 
         wei_balance = self.web3.eth.getBalance(owner)
-        return Web3.fromWei(wei_balance, 'ether')
+        return Web3.from_wei(wei_balance, 'ether')
 
     def get_token_balance(
         self,
